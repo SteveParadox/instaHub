@@ -22,3 +22,6 @@ class AssetVariant(Base,Timestamped):
 class AssetOperation(Base,Timestamped):
  __tablename__="asset_operations"
  id:Mapped[uuid.UUID]=mapped_column(primary_key=True,default=uuid.uuid4);asset_id:Mapped[uuid.UUID]=mapped_column(ForeignKey("media_assets.id"),index=True);operation:Mapped[str]=mapped_column(String(40));settings_json:Mapped[dict]=mapped_column(JSON,default=dict);status:Mapped[str]=mapped_column(String(30),default="queued",index=True);error_message:Mapped[str|None]=mapped_column(Text,nullable=True);variant_id:Mapped[uuid.UUID|None]=mapped_column(ForeignKey("asset_variants.id"),nullable=True)
+class CaptionDraft(Base,Timestamped):
+ __tablename__="caption_drafts"
+ id:Mapped[uuid.UUID]=mapped_column(primary_key=True,default=uuid.uuid4);workspace_id:Mapped[uuid.UUID]=mapped_column(index=True);source_text:Mapped[str]=mapped_column(Text);caption:Mapped[str]=mapped_column(Text);hashtags:Mapped[list]=mapped_column(JSON,default=list);settings_json:Mapped[dict]=mapped_column(JSON,default=dict);created_by:Mapped[str]=mapped_column(String(255))
