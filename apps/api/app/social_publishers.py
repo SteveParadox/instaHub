@@ -1,0 +1,9 @@
+from typing import Protocol
+class BaseSocialPublisher(Protocol):
+ platform:str
+ def publish_image(self,account:dict,media_url:str,caption:str,options:dict)->dict: ...
+ def publish_video(self,account:dict,media_url:str,caption:str,options:dict)->dict: ...
+ def get_publish_status(self,external_post_id:str)->dict: ...
+class DisabledVideoPublisher:
+ def publish_video(self,account:dict,media_url:str,caption:str,options:dict)->dict:
+  raise RuntimeError("Video publishing is not enabled yet")
