@@ -22,4 +22,5 @@ from app.routers.connectors import router as connector_router
 from app.routers.edits import router as edit_router
 from app.routers.captions import router as caption_router
 from app.routers.instagram import router as instagram_router
-app.include_router(generation_router);app.include_router(connector_router);app.include_router(edit_router);app.include_router(caption_router);app.include_router(instagram_router)
+from app.routers.instagram_refresh import router as instagram_refresh_router
+app.include_router(generation_router);app.include_router(connector_router);app.include_router(edit_router);app.include_router(caption_router);app.include_router(instagram_router);app.include_router(instagram_refresh_router)
