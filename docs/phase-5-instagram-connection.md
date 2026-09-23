@@ -1,0 +1,4 @@
+# Phase 5 Instagram connection
+The app starts Meta OAuth with a signed, short-lived state tied to the authenticated user/workspace. The callback exchanges the code, gets a long-lived token, fetches profile information, and accepts only BUSINESS or CREATOR accounts. Tokens are encrypted at rest with CREDENTIAL_ENCRYPTION_KEY and never exposed to the browser.
+
+Configure META_APP_ID, META_APP_SECRET, META_REDIRECT_URI, and the redirect URI in the Meta app dashboard. The production app still requires the appropriate Meta permissions/app review. Instagram professional accounts are required for the publishing platform.
