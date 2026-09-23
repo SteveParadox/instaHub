@@ -1,0 +1,10 @@
+{
+  "name": "instahub",
+  "private": true,
+  "packageManager": "pnpm@10.18.0",
+  "scripts": {
+    "dev": "pnpm --filter @instahub/web dev",
+    "build": "pnpm --filter @instahub/web build",
+    "lint": "pnpm --filter @instahub/web lint"
+  }
+}
