@@ -8,7 +8,7 @@ from app.models import Base
 from app.settings import settings
 @asynccontextmanager
 async def lifespan(app:FastAPI):Base.metadata.create_all(bind=engine);yield
-app=FastAPI(title="instaHub API",version="0.8.0",lifespan=lifespan);app.add_middleware(CORSMiddleware,allow_origins=[settings.web_origin],allow_credentials=True,allow_methods=["*"],allow_headers=["*"])
+app=FastAPI(title="instaHub API",version="0.9.0",lifespan=lifespan);app.add_middleware(CORSMiddleware,allow_origins=[settings.web_origin],allow_credentials=True,allow_methods=["*"],allow_headers=["*"])
 class UserProfile(BaseModel):id:str;email:str|None=None
 def current_user(authorization:str|None=Header(default=None)):
  if not authorization or not authorization.startswith("Bearer "):raise HTTPException(401,"Authentication required")
@@ -27,4 +27,5 @@ from app.routers.publishing import router as publishing_router
 from app.routers.pinterest import router as pinterest_router
 from app.routers.scheduling import router as scheduling_router
 from app.routers.providers import router as providers_router
-app.include_router(generation_router);app.include_router(connector_router);app.include_router(edit_router);app.include_router(caption_router);app.include_router(instagram_router);app.include_router(instagram_refresh_router);app.include_router(publishing_router);app.include_router(pinterest_router);app.include_router(scheduling_router);app.include_router(providers_router)
+from app.routers.brands import router as brands_router
+app.include_router(generation_router);app.include_router(connector_router);app.include_router(edit_router);app.include_router(caption_router);app.include_router(instagram_router);app.include_router(instagram_refresh_router);app.include_router(publishing_router);app.include_router(pinterest_router);app.include_router(scheduling_router);app.include_router(providers_router);app.include_router(brands_router)
