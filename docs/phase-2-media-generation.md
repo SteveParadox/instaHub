@@ -1,4 +1,9 @@
-# Phase 2 media generation
-The API creates a queued job. Celery consumes it from Redis, calls the OpenAI image adapter, uploads each output to S3/R2, writes media assets, and marks the job completed or failed. The browser polls the job every two seconds and renders completed assets.
+# Phase 2 media generation and AI connectors
+The API queues image jobs, Celery generates and stores them, and the browser polls for results.
 
-Set OPENAI_API_KEY plus S3/R2 credentials, bucket, and S3_PUBLIC_BASE_URL in .env. Start the worker with: celery -A app.tasks.celery worker --loglevel=INFO.
+## Workspace connectors
+Users can connect OpenAI from the UI using their own API key. The server validates the key, encrypts it using CREDENTIAL_ENCRYPTION_KEY, and saves only the encrypted value in ai_provider_accounts. The browser never receives the stored key.
+
+The same OpenAI connector powers image generation plus caption and hashtag generation. The catalog deliberately exposes future fal.ai and Replicate entries with their capabilities, while their adapters are added in later phases.
+
+Set OPENAI_API_KEY for a platform-managed default or let each workspace connect its own key. Set CREDENTIAL_ENCRYPTION_KEY to a Fernet key generated with: python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())".
