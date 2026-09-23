@@ -1,0 +1,1 @@
+"use client";export default function Providers(){return <main><h1>AI providers</h1><p>Choose the connected provider and model used for generation. If it is unavailable, instaHub falls back to OpenAI.</p><ul><li>OpenAI — images, captions, hashtags</li><li>fal.ai — ready to enable</li><li>Replicate — ready to enable</li><li>Stability — ready to enable</li></ul></main>}
