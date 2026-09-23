@@ -7,18 +7,17 @@ from app.database import engine
 from app.models import Base
 from app.settings import settings
 @asynccontextmanager
-async def lifespan(app:FastAPI):
- Base.metadata.create_all(bind=engine);yield
-app=FastAPI(title="instaHub API",version="0.2.1",lifespan=lifespan);app.add_middleware(CORSMiddleware,allow_origins=[settings.web_origin],allow_credentials=True,allow_methods=["*"],allow_headers=["*"])
+async def lifespan(app:FastAPI):Base.metadata.create_all(bind=engine);yield
+app=FastAPI(title="instaHub API",version="0.3.0",lifespan=lifespan);app.add_middleware(CORSMiddleware,allow_origins=[settings.web_origin],allow_credentials=True,allow_methods=["*"],allow_headers=["*"])
 class UserProfile(BaseModel):id:str;email:str|None=None
 def current_user(authorization:str|None=Header(default=None)):
  if not authorization or not authorization.startswith("Bearer "):raise HTTPException(401,"Authentication required")
  if not settings.supabase_jwt_secret:raise HTTPException(503,"Auth is not configured")
- try:
-  p=jwt.decode(authorization.removeprefix("Bearer "),settings.supabase_jwt_secret,algorithms=["HS256"],audience="authenticated");return UserProfile(id=p["sub"],email=p.get("email"))
+ try:p=jwt.decode(authorization.removeprefix("Bearer "),settings.supabase_jwt_secret,algorithms=["HS256"],audience="authenticated");return UserProfile(id=p["sub"],email=p.get("email"))
  except (JWTError,KeyError) as exc:raise HTTPException(401,"Invalid token") from exc
 @app.get("/health")
 def health():return {"status":"ok","service":"instahub-api"}
 from app.routers.generations import router as generation_router
 from app.routers.connectors import router as connector_router
-app.include_router(generation_router);app.include_router(connector_router)
+from app.routers.edits import router as edit_router
+app.include_router(generation_router);app.include_router(connector_router);app.include_router(edit_router)
