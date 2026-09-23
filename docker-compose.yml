@@ -10,5 +10,15 @@ services:
   redis:
     image: redis:7-alpine
     ports: ["6379:6379"]
+  api:
+    build: ./apps/api
+    env_file: .env
+    ports: ["8000:8000"]
+    depends_on: [db, redis]
+  worker:
+    build: ./apps/api
+    env_file: .env
+    command: celery -A app.tasks.celery worker --loglevel=INFO
+    depends_on: [db, redis]
 volumes:
   postgres_data:

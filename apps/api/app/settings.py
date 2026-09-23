@@ -1,9 +1,5 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings,SettingsConfigDict
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file="../../.env", extra="ignore")
-    environment: str = "development"
-    database_url: str = "postgresql+psycopg://instahub:instahub@localhost:5432/instahub"
-    redis_url: str = "redis://localhost:6379/0"
-    supabase_jwt_secret: str = ""
-    web_origin: str = "http://localhost:3000"
-settings = Settings()
+ model_config=SettingsConfigDict(env_file="../../.env",extra="ignore")
+ environment:str="development";database_url:str="postgresql+psycopg://instahub:instahub@localhost:5432/instahub";redis_url:str="redis://localhost:6379/0";supabase_jwt_secret:str="";web_origin:str="http://localhost:3000";openai_api_key:str="";openai_image_model:str="gpt-image-1";s3_endpoint_url:str="";s3_public_base_url:str="";s3_bucket:str="";s3_region:str="auto";s3_access_key_id:str="";s3_secret_access_key:str=""
+settings=Settings()
