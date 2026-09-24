@@ -1,8 +1,11 @@
-from cryptography.fernet import Fernet,InvalidToken
+from cryptography.fernet import Fernet, InvalidToken
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+
 from app.models import AIProviderAccount
 from app.settings import settings
+
+
 def cipher()->Fernet:
  if not settings.credential_encryption_key:raise RuntimeError("CREDENTIAL_ENCRYPTION_KEY is required")
  return Fernet(settings.credential_encryption_key.encode())

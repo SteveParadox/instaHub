@@ -1,35 +1,37 @@
 # Data model
 
-All data is workspace-scoped. UUID primary keys, UTC timestamps, and `created_at`/`updated_at` fields are standard.
+All creator data is workspace-scoped. UUID primary keys, UTC timestamps, and `created_at`/`updated_at` fields are standard. Workspace membership is enforced in the API rather than trusting client-supplied workspace IDs.
 
 ## Identity and organization
-- `users`: id (Supabase user id), email, display_name, plan
-- `workspaces`: id, name, owner_id
-- `workspace_members`: workspace_id, user_id, role
-- `brand_profiles`: workspace_id, name, tone, style_preferences, hashtag_preferences, caption_rules, prompt_defaults
+- `users`: Supabase user ID, email, name
+- `workspaces`: name, owner, default AI provider
+- `workspace_members`: workspace, user, role
+- `brand_profiles`: workspace, tone, visual DNA, prompt defaults, reference assets
+- `personas`: brand profile, role, appearance, voice rules, consistency memory
 
 ## Connectors
-- `ai_provider_accounts`: workspace_id, provider_name, encrypted_api_key, settings_json, is_active
-- `social_accounts`: workspace_id, platform, account_name, external_account_id, encrypted_access_token, encrypted_refresh_token, token_expires_at, metadata_json
+- `ai_provider_accounts`: workspace, provider, encrypted API key, settings, active state
+- `social_accounts`: workspace, platform, external account ID, encrypted access/refresh tokens, expiry, metadata
 
-## Media
-- `projects`: workspace_id, name, type
-- `generation_jobs`: workspace_id, project_id, provider_name, model_name, media_type, prompt, negative_prompt, settings_json, status, external_job_id, created_by, completed_at
-- `media_assets`: workspace_id, generation_job_id, media_type, storage_key, delivery_url, thumbnail_url, preview_url, width, height, duration_seconds, fps, aspect_ratio, file_size, mime_type, processing_status, transcode_status, metadata_json
-- `asset_variants`: parent_asset_id, variant_type, storage_key, metadata_json
+## Media and generation
+- `generation_jobs`: workspace, provider/model, media type, prompt, settings, status, provider job ID, creator, completion time
+- `video_generation_jobs`: workspace, provider/model, prompt, progress, provider job ID, reference settings, output asset
+- `media_assets`: workspace, media type, object key/public URL, thumbnail/preview, dimensions, duration, FPS, aspect ratio, processing/transcode state, MIME type, metadata
+- `asset_operations`: source asset, operation, creator, settings, status, output variant
+- `asset_variants`: immutable child version, operation, object key/public URL, dimensions, metadata
+- `caption_drafts`: workspace, source text, caption, hashtags, options, creator
 
 ## Publishing
-- `posts`: workspace_id, media_asset_id, caption, first_comment, platform, status, scheduled_at, published_at, created_by
-- `post_targets`: post_id, social_account_id, platform_specific_settings_json
-- `publish_attempts`: post_id, social_account_id, idempotency_key, external_post_id, status, response_json, error_message
+- `posts`: workspace, asset, caption, platform, platform settings, state, scheduled/published times, creator
+- `publish_attempts`: post, social account, idempotency key, retry count, external post ID, response metadata, diagnostics
 
 ## Governance
-- `usage_events`: workspace_id, user_id, event_type, provider_name, credits_used, cost_estimate, metadata_json
-- `audit_events`: workspace_id, actor_id, action, entity_type, entity_id, metadata_json
-- `automation_rules`: workspace_id, name, trigger_type, action_type, config_json, is_active
+- `usage_events`: workspace, user, event type, provider, credits, estimated cost, metadata
 
 ## Important constraints
-- `media_type` is an enum: image, video, carousel, story, reel.
+- `media_assets.media_type` keeps the library media-agnostic; image is active and video metadata is ready.
 - Tokens and provider keys are encrypted at rest and never returned by the API.
-- A unique index on `publish_attempts.idempotency_key` prevents duplicate delivery.
-- Every queue operation is tied to a workspace, user, and audit event.
+- A unique constraint on `publish_attempts.idempotency_key` protects each tracked delivery attempt.
+- Alembic owns schema evolution; application startup does not call `create_all`.
+
+Projects, approval workflows, audit events, automation rules, carousels, and billing records remain planned rather than implemented tables.

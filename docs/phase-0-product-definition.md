@@ -1,22 +1,22 @@
 # Phase 0 — Product Definition
 
 ## V1 outcome
-A creator can sign in, create a workspace, generate an AI image, save it to a media library, create a caption/hashtags, connect one Instagram professional account, then publish immediately or schedule a single-image feed post.
+A creator can sign in, create a workspace, generate an AI image, save it to a media library, create a caption/hashtags, connect Instagram or Pinterest, then publish immediately or schedule a single-image post.
 
 ## In scope
-- Email/OAuth sign-in through Supabase Auth
+- Email/password sign-in through Supabase Auth
 - Personal workspace and profile
 - Prompt-to-image generation through one provider adapter
 - Media library, asset variants, captions and hashtags
-- Instagram Business/Creator account connection
-- Publish now, scheduled publishing, publishing status and retry-safe attempts
-- Audit events, usage events, cost limits, structured logging and failure tracking
+- Instagram Business/Creator and Pinterest account connections
+- Publish now, scheduled publishing, publishing status and retry-tracked attempts
+- Usage events, request IDs, structured failure diagnostics and workspace authorization
 
 ## Explicitly deferred
-- Video/Reels generation and publishing
-- Carousels, Stories, multi-platform distribution
+- Live video generation adapters and video publishing UI (the schema/contracts are ready)
+- Carousels, Stories, and additional social platforms
 - Collaborative approval flows, paid subscriptions, workflow automations, deep analytics
-- User-supplied provider API keys in the initial UI (the schema supports this)
+- Advanced provider adapters beyond the active OpenAI implementation
 
 ## User stories and acceptance criteria
 | Story | Done when |
@@ -33,8 +33,8 @@ A creator can sign in, create a workspace, generate an AI image, save it to a me
 | Capability | V1 choice | Alternatives kept behind adapters |
 |---|---|---|
 | Image generation/editing | OpenAI Images API | fal.ai, Replicate, Stability, FLUX providers |
-| Caption + hashtags | OpenAI Responses API | Anthropic, Gemini |
-| Image transformations | Provider-native initially | fal.ai, Replicate, Cloudinary |
+| Caption + hashtags | OpenAI Chat Completions | Anthropic, Gemini |
+| Image transformations | OpenAI edits + local crop/upscale | fal.ai, Replicate, Cloudinary |
 | Storage | Cloudflare R2 | AWS S3 |
 | Auth | Supabase Auth | Clerk |
 | Video later | — | Runway, Kling, Veo, fal.ai, Replicate |

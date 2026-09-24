@@ -1,7 +1,10 @@
 import base64
+
 from openai import OpenAI
-from app.providers.base import BaseMediaProvider,GeneratedImage,ImageRequest
+
+from app.providers.base import BaseMediaProvider, GeneratedImage, ImageRequest
 from app.settings import settings
+
 SIZES={"1:1":("1024x1024",1024,1024),"4:5":("1024x1536",1024,1536),"16:9":("1536x1024",1536,1024)}
 class OpenAIImageProvider(BaseMediaProvider):
  name="openai"

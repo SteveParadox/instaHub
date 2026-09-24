@@ -8,6 +8,7 @@ flowchart TD
   API --> Storage["S3/R2 storage"]
   Queue --> Providers["AI provider adapters"]
   Queue --> Meta["Instagram Graph API"]
+  Queue --> Pinterest["Pinterest API"]
   API --> Auth["Supabase Auth"]
 ```
 
@@ -16,4 +17,5 @@ flowchart TD
 - Connector adapters own provider-specific request/response code.
 - Workers perform long-running generation, scheduling and publishing.
 - Media files live in object storage; the database only stores metadata and keys.
-- Webhooks verify signatures before changing job or publish state.
+- Workspace membership is checked before every tenant-scoped read or write.
+- Celery Beat claims due posts with row locks and dispatches them to platform workers.
