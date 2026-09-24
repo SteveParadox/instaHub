@@ -1,4 +1,6 @@
 from typing import Protocol
+
+
 class BaseSocialPublisher(Protocol):
  platform:str
  def publish_image(self,account:dict,media_url:str,caption:str,options:dict)->dict: ...

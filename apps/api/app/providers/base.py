@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 from typing import Protocol
+
+
 @dataclass(frozen=True)
 class ImageRequest: prompt:str;style_preset:str;aspect_ratio:str;output_count:int
 @dataclass(frozen=True)
